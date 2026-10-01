@@ -1,0 +1,164 @@
+@import "tailwindcss";
+
+/* ───────────────────────── Design tokens ─────────────────────────
+   Palette: roasted espresso browns, temple-brass gold, kumkum red
+   and ivory — South-Indian tradition expressed with premium restraint. */
+@theme {
+  --color-espresso: #1c120c;
+  --color-roast: #2b1b12;
+  --color-mocha: #4a3123;
+  --color-ink: #2a1d16;
+  --color-muted: #6f5b4d;
+  --color-ivory: #fbf7f0;
+  --color-cream: #f4ecdf;
+  --color-sand: #e7dac4;
+  --color-line: #dccbb0;
+  --color-brass: #b48c48;
+  --color-brass-light: #dcbb78;
+  --color-brass-deep: #84652c;
+  --color-kumkum: #8e2b1d;
+  --color-leaf: #3f5a3c;
+
+  --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+  --font-telugu: var(--font-telugu-serif), "Noto Serif Telugu", serif;
+
+  --ease-luxe: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-ivory font-sans text-ink antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display text-espresso;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  ::selection {
+    @apply bg-brass-light text-espresso;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-brass);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+/* ───────────────────────── Motifs & utilities ───────────────────────── */
+
+/* Kolam-style dot grid */
+@utility kolam {
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--color-brass) 38%, transparent) 1.2px, transparent 1.6px);
+  background-size: 22px 22px;
+}
+@utility kolam-dark {
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--color-brass-light) 22%, transparent) 1.2px, transparent 1.6px);
+  background-size: 22px 22px;
+}
+
+/* Temple-arch frame used for product imagery */
+@utility arch {
+  border-radius: 999px 999px 1.25rem 1.25rem;
+}
+
+@utility eyebrow {
+  @apply font-sans text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-brass-deep;
+}
+
+@utility brass-text {
+  background: linear-gradient(100deg, #8a6a2f 0%, #dcbb78 45%, #b48c48 70%, #8a6a2f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility container-luxe {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10;
+}
+
+/* Buttons */
+@utility btn {
+  @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold tracking-wide transition-all duration-300;
+  transition-timing-function: var(--ease-luxe);
+}
+@utility btn-primary {
+  @apply bg-espresso text-ivory hover:bg-mocha;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-brass-light) 35%, transparent);
+}
+@utility btn-brass {
+  @apply text-espresso;
+  background: linear-gradient(135deg, #e3c584, #b48c48 60%, #9c7838);
+  box-shadow: 0 8px 24px -10px rgb(132 101 44 / 0.7);
+  &:hover {
+    filter: brightness(1.06);
+  }
+}
+@utility btn-ghost {
+  @apply border border-line bg-transparent text-espresso hover:border-brass hover:bg-cream;
+}
+@utility btn-ghost-light {
+  @apply border border-white/25 bg-white/5 text-ivory backdrop-blur hover:border-brass-light hover:bg-white/10;
+}
+
+/* Reveal-on-scroll (paired with <Reveal/>) */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.9s var(--ease-luxe), transform 0.9s var(--ease-luxe);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Steam rising from cups in illustrations */
+@keyframes steam {
+  0% { transform: translateY(6px) scaleX(1); opacity: 0; }
+  30% { opacity: 0.55; }
+  100% { transform: translateY(-26px) scaleX(1.4); opacity: 0; }
+}
+.steam path {
+  animation: steam 3.6s ease-out infinite;
+  transform-box: fill-box;
+  transform-origin: center bottom;
+}
+.steam path:nth-child(2) { animation-delay: 1.2s; }
+.steam path:nth-child(3) { animation-delay: 2.4s; }
+
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+.marquee {
+  animation: marquee 40s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .steam path, .marquee { animation: none; }
+}
+
+/* Pages with a sticky mobile action bar already offer WhatsApp */
+@media (max-width: 639px) {
+  body:has(.mobile-action-bar) .wa-fab { display: none; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Hide scrollbar for horizontal chip rails on mobile */
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
